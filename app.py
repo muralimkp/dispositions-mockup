@@ -1,8 +1,8 @@
 import streamlit as st
 import json
 
-st.set_page_config(page_title="Disposition Configurator", layout="centered")
-st.title("Disposition Configurator")
+st.set_page_config(page_title="Disposition Mockup", layout="centered")
+st.title("Disposition Mockup")
 
 # Initialize session state
 if "dispositions" not in st.session_state:
@@ -25,8 +25,8 @@ if st.button("➕ Add Disposition"):
 # UI for each disposition
 for i, disp in enumerate(st.session_state.dispositions):
     with st.expander(f"Disposition {i+1}", expanded=True):
-        label = st.text_input("Label", value=disp["label"], max_chars=15, key=f"label_{i}")
-        description = st.text_input("Description", value=disp["description"], max_chars=15, key=f"desc_{i}")
+        label = st.text_input("Label", value=disp["label"], max_chars=30, key=f"label_{i}")
+        description = st.text_input("Description", value=disp["description"], max_chars=100, key=f"desc_{i}")
 
         # Input field to add new values
         new_val = st.text_input("Add a Value", key=f"new_val_{i}", max_chars=20, placeholder="Type and press 'Add'")
