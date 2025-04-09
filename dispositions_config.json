@@ -16,12 +16,6 @@
     },
     {
       "level": 2,
-      "label": "Resolution Status",
-      "description": "Identify is Resolved/Not Resolved",
-      "values": []
-    },
-    {
-      "level": 3,
       "label": "Action Taken",
       "description": "",
       "values": [
@@ -29,6 +23,12 @@
         "Escalated",
         "Callback Scheduled"
       ]
+    },
+    {
+      "level": 3,
+      "label": "Resolution Status",
+      "description": "Identify is Resolved/Not Resolved",
+      "values": []
     }
   ]
 }
