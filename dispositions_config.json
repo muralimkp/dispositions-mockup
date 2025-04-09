@@ -1,0 +1,34 @@
+{
+  "dispositions": [
+    {
+      "level": 1,
+      "label": "Call Reason",
+      "description": "Identify the reason why the customer called",
+      "values": [
+        "Billing",
+        "Technical Issue",
+        "General Inquiry",
+        "Service Cancellation",
+        "Product Upgrade",
+        "Account Update",
+        "Device Activation"
+      ]
+    },
+    {
+      "level": 2,
+      "label": "Resolution Status",
+      "description": "Identify is Resolved/Not Resolved",
+      "values": []
+    },
+    {
+      "level": 3,
+      "label": "Action Taken",
+      "description": "",
+      "values": [
+        "Transferred",
+        "Escalated",
+        "Callback Scheduled"
+      ]
+    }
+  ]
+}
