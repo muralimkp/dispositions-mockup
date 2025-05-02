@@ -7,7 +7,6 @@ from disposition_functions import process_transcript, initialize_llm, generate_d
 
 st.set_page_config(page_title="Disposition Mockup v2", layout="wide")
 st.title("Disposition Mockup v2")
-st.set_page_config(layout="wide")
 
 default_prompt_intro = "You will be given a customer service transcript....<fill in the rest of the prompt>"
 default_guidelines = """
