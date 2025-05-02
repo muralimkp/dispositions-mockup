@@ -5,7 +5,7 @@ import os
 from disposition_functions import process_transcript, initialize_llm, generate_disposition_prompt, \
     get_level_label_mapping, identify_dispositions, visualize_disposition_path, generate_disposition_promptv2
 
-st.set_page_config(page_title="Disposition Mockup v2", layout="centered",layout="wide")
+st.set_page_config(page_title="Disposition Mockup v2", layout="wide")
 st.title("Disposition Mockup v2")
 st.set_page_config(layout="wide")
 
