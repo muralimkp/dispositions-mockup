@@ -109,6 +109,27 @@ Guidelines:
 
     return "\n".join(prompt_parts)
 
+def generate_disposition_promptv2(system_prompt_intro: str, config: dict, guidelines: str) -> str:
+    levels = config.get("dispositions", [])
+    prompt_parts = [system_prompt_intro]
+
+    prompt_parts.append("The configuration contains levels of dispositions:")
+
+    for level in levels:
+        level_str = f"\nLevel {level['level']} - {level['label']}: {level.get('description', '').strip() or 'No description'}"
+        values = level.get("values", [])
+        if values:
+            level_str += f"\nPossible values: {', '.join(values)}"
+        else:
+            level_str += "\nYou may generate suitable values if none are listed."
+        prompt_parts.append(level_str)
+
+    prompt_parts.append(f"\n{guidelines}")
+    print(system_prompt_intro)
+    print("lvels")
+    return "\n".join(prompt_parts)
+
+
 def get_level_label_mapping(config: dict) -> dict:
     mapping = {}
     for item in config.get("dispositions", []):

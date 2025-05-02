@@ -3,10 +3,20 @@ import json
 from streamlit_sortables import sort_items
 import os
 from disposition_functions import process_transcript, initialize_llm, generate_disposition_prompt, \
-    get_level_label_mapping, identify_dispositions, visualize_disposition_path
+    get_level_label_mapping, identify_dispositions, visualize_disposition_path, generate_disposition_promptv2
 
 st.set_page_config(page_title="Disposition Mockup v2", layout="centered")
 st.title("Disposition Mockup v2")
+st.set_page_config(layout="wide")
+
+default_prompt_intro = "You will be given a customer service transcript....<fill in the rest of the prompt>"
+default_guidelines = """
+            - You may assign more than one value per level, but keep it concise.
+            - If the config provides possible values, pick from them. If not, choose sensible values based on the transcript.
+            - Return the result as a JSON in the format: { "L1": [...], "L2": [...], "L3": [...] }
+            - Do not explain. Just return the JSON <add remaining guidelines for output generation>. """
+
+
 
 tab1, tab2 = st.tabs(["Configure Dispositions", "Test Dispositions"])
 if "final_config" not in st.session_state:
@@ -25,6 +35,12 @@ if "level_mapping" not in st.session_state:
     st.session_state.level_mapping = None
 if "prompt" not in st.session_state:
     st.session_state.prompt = None
+if "intro" not in st.session_state:
+    st.session_state.intro = default_prompt_intro
+if "guidelines" not in st.session_state:
+    st.session_state.guidelines = default_guidelines
+
+
 
 with tab1:
     if "dispositions" not in st.session_state and os.path.exists("dispositions_config.json"):
@@ -177,6 +193,13 @@ with tab2:
                 st.session_state.llm = initialize_llm(st.session_state.openai_config)
                 st.session_state.model_name = st.session_state.openai_config.get("azure_deployment")
 
+
+
+            # Add text input fields for prompt intro and guidelines
+            st.session_state.intro = st.text_area("Prompt Intro", value=default_prompt_intro, height=150)
+            st.session_state.guidelines = st.text_area("Guidelines", value=default_guidelines, height=200)
+
+
             # Show transcript uploader after config is loaded
             st.subheader("Upload Transcript Files")
             transcript_file = st.file_uploader("Upload transcripts", type=["txt"], key="transcript_uploader")
@@ -191,8 +214,10 @@ with tab2:
                 # Call processing function
                 st.session_state.transcript_data = process_transcript(st.session_state.transcript_file)
                 st.session_state.level_mapping = get_level_label_mapping(st.session_state.final_config)
-                st.session_state.prompt = generate_disposition_prompt(config=st.session_state.final_config)
+
+                st.session_state.prompt = generate_disposition_promptv2(config=st.session_state.final_config,system_prompt_intro=st.session_state.intro,guidelines=st.session_state.guidelines)
                 dispositions_found = identify_dispositions(transcript="\n".join(st.session_state.transcript_data),model=st.session_state.model_name,llm=st.session_state.llm,prompt=st.session_state.prompt)
                 visualize_disposition_path(dispositions_found)
         except json.JSONDecodeError:
-            st.error("Invalid JSON file. Please upload a valid OpenAI config.")
+            st.write(dispositions_found)
+            st.error("Guidelines are not good enough to generate a parsable response. Check with Murali/Alfin, meanwhile you can refer the text printed above to read the values")
